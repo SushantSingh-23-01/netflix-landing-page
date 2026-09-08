@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			font-family: system-ui, sans-serif;
+			background-color: #000000;
+			color: #ffffff;
+		}
+		.features-container {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+			gap: 0.75rem;
+		}
+		.feature-card {
+			background: linear-gradient(135deg, #1b2142 0%, #1e0f17 70%);
+			box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.1);
+			border-radius: 0.25rem;
+			min-height: 250px;
+
+			display: flex;
+			flex-direction: column;
+			padding: 0.5rem  1rem;
+		}
+		.feature-card-title { font-size: 1.5rem; }
+		.feature-card-desc { color: #b2b2b2; }
+		.feature-card-icon {
+			width: 5rem;
+			height: auto;
+			margin-top: auto;
+			align-self: flex-end;
+		}
+
+		@media (max-width: 500px) {
+			.features-container { grid-template-columns: 1fr; }
+		}
+	</style>
+</head>
+<body>
+	<section class="features-container" data-features-container></section>
+	<script>
+		const DATA = [
+			{
+				title: "Enjoy on your TV",
+				description: "Watch on smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players and more.",
+				svg: "../assets/icons/gemini-tv-icon.svg"
+			},
+			{
+				title: "Download your shows to watch offline",
+				description: "Save your favourites easily and always have something to watch.",
+				svg: "../assets/icons/gemini-circle-down-arrow.svg"
+			},
+			{
+				title: "Watch everywhere",
+				description: "Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.",
+				svg: "../assets/icons/gemini-telescope.svg"
+			},
+			{
+				title: "Create profiles for kids",
+				description: "Send kids on adventures with their favourite characters in a space made just for them — free with your membership.",
+				svg: "../assets/icons/gemini-overlap-card.svg"
+			}
+		];
+		const featuresContainer = document.querySelector('[data-features-container]');
+		
+		featuresContainer.innerHTML = DATA.map(item  => `
+			<div class="feature-card">
+				<h3 class="feature-card-title">${item.title}</h3>
+				<p class="feature-card-desc">${item.description}</p>
+				<img src="${item.svg}" alt="" aria-hidden="true" class="feature-card-icon">
+			</div>
+		`).join('');
+	</script>
+</body>
+</html>
