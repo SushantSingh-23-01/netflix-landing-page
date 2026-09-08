@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			font-family: system-ui, sans-serif;
+			background-color: #000000;
+			color: #ffffff;
+		}
+		.trending-container {
+			display: flex; 
+			align-items: center; 
+			justify-content: center; 
+			overflow: hidden;
+			position: relative;
+		}
+		.posters-container {
+			display: flex;
+			overflow-x: auto;
+			overflow-y: hidden;
+			
+			padding: 0.5rem 1.5rem;
+			gap: 2rem;
+			scrollbar-width: none;
+		}
+		.posters-container::-webkit-scrollbar { display: none; }
+		.poster-card {
+			flex: 0 0 11rem;
+			position: relative;
+			cursor: pointer;
+			transition: transform 0.2s ease-in-out;
+		}
+		.poster-card:hover {transform: scale(1.05);}
+		.poster-img {
+			width: 100%;
+			height: auto;
+			border-radius: 0.25rem;
+		}
+		.poster-rank {
+			position: absolute;
+			z-index: 1;
+			left: -1.25rem;
+			bottom: 0;
+			font-size: 6rem;
+			font-weight: 800;
+			color: #000000;
+			filter: drop-shadow(4px 4px 16px rgba(0, 0, 0, 0.75));
+			-webkit-text-stroke: 2px #ffffff;
+		}
+		.scroll-handle {
+			position: absolute;
+			z-index: 2;
+			
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			
+			width: 4rem;
+			height: 100%;
+			background-color: #000000;
+			
+			opacity: 1;
+			visibility: visible;
+			transform: translateX(0);
+			transition: transform 0.3s ease-in-out,
+									opacity 0.3s ease-in-out,
+									visibility 0.3s ease-in-out;
+		}
+		.scroll-handle.left {left: 0;}
+		.scroll-handle.right {right: 0;}
+		.scroll-handle[data-state="hidden"] {
+			opacity: 0;
+			visibility: hidden;
+			pointer-events: none;
+		}
+		.scroll-btn {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 3rem 0.4rem;
+			
+			background-color: rgba(40, 40, 40, 0.75);
+			border: none;
+			border-radius: 0.5rem;
+			font-size: 1.5rem;
+			color: #b2b2b2;
+			
+			cursor: pointer;
+			transition: background-color 0.3s ease-in-out;
+		}
+		.scroll-btn:hover {background-color: rgba(70, 70, 70, 0.75);}
+	</style>
+</head>
+<body>
+	<!-- Clean component wrapper with a data hook -->
+	<section class="trending-section" data-carousel>
+		<h2>Trending Section</h2>
+		<div class="trending-container">
+			
+			<div class="scroll-handle left" data-handle="left" data-state="hidden">
+				<button class="scroll-btn left" data-scroll="left">❮</button>
+			</div>
+			
+			<div class="posters-container" data-posters></div>
+			
+			<div class="scroll-handle right" data-handle="right" data-state="visible">
+				<button class="scroll-btn right" data-scroll="right">❯</button>
+			</div>
+		</div>
+	</section>
+	
+	<script>
+		// 1. Grab the parent component first
+		const carousel = document.querySelector('[data-carousel]');
+		
+		// 2. Scope all inner elements safely to this component
+		const postersContainer = carousel.querySelector('[data-posters]');
+		const leftHandle = carousel.querySelector('[data-handle="left"]');
+		const rightHandle = carousel.querySelector('[data-handle="right"]');
+		const scrollButtons = carousel.querySelectorAll('[data-scroll]');
+		
+		const postersData = [
+			'Alpha', 'Bhoot Bangla', 'Cocktail-2', 'Con City', 'Gatta Kusthi-2',
+			'Ikka', 'Musafir Cafe', 'Operation Safed Sagar', 'Peddi', 'The Last Salute'
+		];
+		
+		// Render dynamic HTML content
+		const postersHTML = postersData.map((item, index) => {
+			const posterFileName = item.toLowerCase().replace(/\s+/g, '-');
+			const rank = index + 1;
+			return `
+				<div class="poster-card">
+					<span class="poster-rank">${rank}</span>
+					<img src="../assets/posters/${posterFileName}.webp" alt="${item}" class="poster-img">
+				</div>
+			`;
+		}).join('');
+		postersContainer.innerHTML = postersHTML;
+		
+		// Handle Scroll Button Clicks
+		scrollButtons.forEach((button) => {
+			button.addEventListener('click', () => {
+				const width = postersContainer.clientWidth * 0.75;
+				// Read direction directly from data-scroll value ("left" or "right")
+				const direction = button.dataset.scroll; 
+				
+				postersContainer.scrollBy({
+					left: direction === 'left' ? -width : width,
+					behavior: 'smooth'
+				});
+			});
+		});
+		
+		// Toggle Handles based on Scroll Position
+		function toggleScrollHandles() {
+			const scrollLeft = postersContainer.scrollLeft;
+			const maxScroll = postersContainer.scrollWidth - postersContainer.clientWidth;
+			
+			// If at the very start, hide left handle, else show it
+			leftHandle.dataset.state = scrollLeft <= 5 ? "hidden" : "visible";
+			
+			// If at the very end, hide right handle, else show it
+			rightHandle.dataset.state = scrollLeft >= maxScroll - 5 ? "hidden" : "visible";
+		}
+		
+		// Listen to scroll events to trigger the handle toggle
+		postersContainer.addEventListener('scroll', toggleScrollHandles);
+		
+		// Check arrow visibility instantly after rendering items
+		toggleScrollHandles();
+	</script>
+</body>	
+</html>
