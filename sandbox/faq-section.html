@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background-color: #000000;
+      color: #ffffff;
+    }
+    .faq-section {
+      max-width: 800px;
+      margin: 0 auto;
+    } 
+    .faq-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .accordion-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      background-color: #2d2d2d;
+      color: #ffffff;
+      padding: 1.5rem 1.25rem;
+      font-size: 1.5rem;
+      border: none;
+      cursor: pointer;
+    }
+    .accordion-header:hover, .accordion-header:focus-visible { 
+      background-color: #414141;
+    }
+    .accordion-header-icon {
+      width: 2.25rem;
+      height: auto;
+      transition: transform 0.3s ease-in-out;
+    }
+    .accordion-header[aria-expanded="true"] .accordion-header-icon {
+      transform: rotate(-45deg);
+    }
+
+    .accordion-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.3s ease-in-out;
+    }
+    .accordion-header[aria-expanded="true"] + .accordion-content {
+      grid-template-rows: 1fr;
+      border-top: 1px solid #000000;
+    }
+    .accordion-inner {
+      background-color: #2d2d2d;
+      overflow: hidden;
+      min-height: 0;
+    }
+    .accordion-inner p {
+      padding: 0 1.5rem;
+      font-size: 1.5rem;
+
+      white-space: pre-line; 
+    }
+    @media (max-width: 768px) {
+      .faq-section h2 { font-size: 1.2rem; }
+      .accordion-header { font-size: 1.2rem; }
+      .accordion-header-icon { width: 1.5rem; }
+      .accordion-inner p {font-size: 1.2rem; padding: 0 1.25rem;}
+    }
+  </style>
+</head>
+<body>
+  <section class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-container" data-faq-container></div>
+  </section>
+  <script>
+    const DATA = [
+    {
+      question: "What is Netflix?",
+      answer: "Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries and more - on thousands of internet-connected devices.\n\nYou can watch as much as you want, whenever you want, without a single ad - all for one low monthly price. There's always something new to discover, and new TV shows and movies are added every week!"
+    },
+    {
+      question: "How much does Netflix cost?",
+      answer: "Watch Netflix on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from ₹149 to ₹649/month."
+    },
+    {
+      question: "Where can I watch?",
+      answer: "Watch anywhere, anytime. Sign in with your Netflix account to watch instantly on the web at netflix.com from your personal computer or on any internet-connected device that offers the Netflix app, including smart TVs, smartphones, tablets, streaming media players and game consoles.\n\nYou can also download your favourite shows with the iOS or Android app. Use downloads to watch while you're on the go and without an internet connection. Take Netflix with you anywhere."
+    },
+    {
+      question: "How do I cancel?",
+      answer: "Netflix is flexible. You can easily cancel your account online in two clicks. There are no cancellation fees - start or stop your account anytime."
+    },
+    {
+      question:"What can I watch on Netflix",
+      answer: "Netflix has an extensive library of feature films, documentaries, shows, anime, award-winning Netflix originals, and more. Watch as much as you want, anytime you want."
+    },
+    {
+      question: "Is Netflix good for kids?",
+      answer: "The Netflix Kids experience is included in your membership to give parents control while kids enjoy family-friendly TV shows and films in their own space.\n\nKids profiles come with PIN-protected parental controls that let you restrict the maturity rating of content kids can watch and block specific titles you don't want kids to see."
+    }
+  ];
+    const faqContainer = document.querySelector('[data-faq-container]');
+
+    faqContainer.innerHTML = DATA.map((item, index) => ` 
+      <div class="accordion-item">
+        <button 
+          class="accordion-header" id="faq-header-${index}" 
+          aria-controls="faq-content-${index}" aria-expanded="false">
+          <span>${item.question}</span>
+          <svg class="accordion-header-icon" viewBox="0 0 16 16" role="img" aria-hidden="true" fill="#ffffff">
+              <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+          </svg>
+        </button>
+        <div class="accordion-content" id="faq-content-${index}">
+          <div class="accordion-inner">
+            <p>${item.answer}</p>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    function accordionListeners() {
+      const accordionItems = faqContainer.querySelectorAll('.accordion-item');
+      accordionItems.forEach(item => {
+        const button = item.querySelector('.accordion-header');
+        const content = item.querySelector('.accordion-content');
+
+        button.addEventListener('click', () => {
+          // 1. Check if the CURRENT button is already expanded BEFORE closing anything
+          const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+          // 2. Find the single item that is currently open (if any) and close it
+          const openButton = faqContainer.querySelector('.accordion-header[aria-expanded="true"]');
+          if (openButton) {
+            openButton.setAttribute('aria-expanded', 'false');
+          }
+          
+          // 3. Toggle state: if it wasn't expanded, open it. If it was, leave it closed.
+          if (!isExpanded) {
+            button.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    }
+
+    accordionListeners();
+  </script>
+</body>
+</html>
