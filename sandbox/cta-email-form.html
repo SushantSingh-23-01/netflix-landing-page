@@ -13,7 +13,7 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			gap: 1rem;
+			gap: 1.5em;
 		}
 		.email-input-row {
 			display: flex;
@@ -31,7 +31,7 @@
 		/* Floating Email input styling */
 		.floating-email-group {position: relative;}
 		.email-input {
-			min-width: 200px;
+			min-width: 350px;
 			padding: 1.5rem 1rem 0.75rem 1rem;
 			background-color: rgba(20, 20, 20, 0.75);
 			color: #ffffff;
@@ -64,9 +64,9 @@
 			color: #ffffff;
 			border: none;
 			border-radius: 0.25rem;
-			font-size: 1.1rem;
-			font-weight: 600;
-			padding: 1rem 1.25rem;
+			font-size: 1.25rem;
+			font-weight: 700;
+			padding: 1rem 1.5rem;
 			gap: 0.5rem;
 			transition: background-color 0.3s ease-in-out;
 		}
@@ -90,11 +90,49 @@
 			outline: 2px solid #ffffff;
 			outline-offset: 2px;
 		}
+		
+		@media (max-width: 960px) {
+			.cta-form-text {
+				max-width: 400px;
+				text-align: center;
+			}
+			.email-input { min-width: 200px; }
+			.submit-btn-cta {
+				font-size: 1.1rem;
+				font-weight: 600;
+				padding: 1rem 1.25rem;
+			}
+		}
+		
+		@media (max-width: 768px) {
+			.cta-form-text {
+				text-align: center;
+			}
+			.email-input-row {
+				flex-direction: column;
+				align-items: center;
+				gap: 1rem;
+				width: 90%;
+			}
+			.input-container {width: 100%;}
+			.floating-email-group {width: 90%;}
+			.email-input {
+				width: 100%;
+				max-width: 600px;
+				padding: 1.25rem 1rem 0.5rem 1rem;
+			}
+			.floating-email-group label  {
+				top: 25%;
+			}
+			.submit-btn-cta {
+				padding: 0.75rem 1rem;
+			}
+		}
 	</style>
 </head>
 <body>
 	<form class="cta-form">
-		<span>Ready to watch? Enter your email to create or restart your membership.</span>
+		<span class="cta-form-text">Ready to watch? Enter your email to create or restart your membership.</span>
 		<div class="email-input-row">
 			<div class="input-container" data-state="hidden">
 			
