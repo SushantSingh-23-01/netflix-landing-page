@@ -9,6 +9,10 @@
 			background-color: #000000;
 			color: #ffffff;
 		}
+		.trending-section h2 {
+			font-size: 1.1rem;
+			font-weight: 600;
+		}
 		.trending-container {
 			display: flex; 
 			align-items: center; 
@@ -21,13 +25,13 @@
 			overflow-x: auto;
 			overflow-y: hidden;
 			
-			padding: 0.5rem 1.5rem;
-			gap: 2rem;
+			padding: 0.5rem;
+			gap: 1rem;
 			scrollbar-width: none;
 		}
 		.posters-container::-webkit-scrollbar { display: none; }
 		.poster-card {
-			flex: 0 0 11rem;
+			flex: 0 0 7rem;
 			position: relative;
 			cursor: pointer;
 			transition: transform 0.2s ease-in-out;
@@ -41,12 +45,12 @@
 		.poster-rank {
 			position: absolute;
 			z-index: 1;
-			left: -1.25rem;
-			bottom: 0;
-			font-size: 6rem;
+			left: -0.5rem;
+			bottom: 0.25rem;
+			font-size: 4rem;
 			font-weight: 800;
 			color: #000000;
-			filter: drop-shadow(4px 4px 16px rgba(0, 0, 0, 0.75));
+			filter: drop-shadow(4px 4px 16px rgba(0, 0, 0, 0.5));
 			-webkit-text-stroke: 2px #ffffff;
 		}
 		.scroll-handle {
@@ -57,7 +61,7 @@
 			align-items: center;
 			justify-content: center;
 			
-			width: 4rem;
+			width: 3rem;
 			height: 100%;
 			background-color: #000000;
 			
@@ -79,24 +83,51 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			padding: 3rem 0.4rem;
+			padding: 2.75rem 0.4rem;
 			
 			background-color: rgba(40, 40, 40, 0.75);
 			border: none;
 			border-radius: 0.5rem;
-			font-size: 1.5rem;
+			font-size: 1.25rem;
 			color: #b2b2b2;
 			
 			cursor: pointer;
 			transition: background-color 0.3s ease-in-out;
 		}
 		.scroll-btn:hover {background-color: rgba(70, 70, 70, 0.75);}
+		
+		@media (min-width: 1280px) {
+			body {
+				padding: 0 8.75rem;
+			}
+			.trending-section h2 {
+				font-size: 1.5rem;
+				font-weight: 600;
+				margin-bottom: 0.5rem;
+			}
+			.posters-container {
+				padding: 1rem 1.25rem;
+				gap: 2rem;
+			}
+			.poster-card {
+				flex: 0 0 11.5rem;
+			}
+			.poster-img { border-radius: 0.5rem; }
+			.poster-rank {
+				left: -0.75rem;
+				font-size: 6.5rem;
+				filter: drop-shadow(4px 4px 16px rgba(0, 0, 0, 0.75));
+			}
+			.scroll-btn {
+				padding: 2.75rem 0.45rem;
+				font-size: 1.3rem;
+			}
+		}
 	</style>
 </head>
 <body>
-	<!-- Clean component wrapper with a data hook -->
 	<section class="trending-section" data-carousel>
-		<h2>Trending Section</h2>
+		<h2>Trending Now</h2>
 		<div class="trending-container">
 			
 			<div class="scroll-handle left" data-handle="left" data-state="hidden">
