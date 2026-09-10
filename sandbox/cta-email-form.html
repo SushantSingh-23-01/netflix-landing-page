@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			font-family: system-ui, sans-serif;
+			background-color: #000000;
+			color: #ffffff;
+		}
+		.cta-form {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+		}
+		.email-input-row {
+			display: flex;
+			flex-direction: row;
+			align-items: flex-start;
+			gap: 0.5rem;
+		}
+		.input-container {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.25rem;
+		}
+		
+		/* Floating Email input styling */
+		.floating-email-group {position: relative;}
+		.email-input {
+			min-width: 200px;
+			padding: 1.5rem 1rem 0.75rem 1rem;
+			background-color: rgba(20, 20, 20, 0.75);
+			color: #ffffff;
+			border: 1px solid rgba(128, 128, 128, 0.5);
+			border-radius: 0.25rem;
+			outline: none;
+		}
+		.floating-email-group label {
+			position: absolute;
+			left: 1rem;
+			top: 30%;
+			transition: transform 0.3s ease;
+		}
+		.email-input:focus {
+			outline: 2px solid #ffffff;
+			outline-offset: 2px;
+		}
+		.email-input:focus ~ label,
+		.email-input:not(:placeholder-shown) ~ label {
+			transform: translateY(-0.65rem);
+			font-size: 0.75rem;
+		}
+		
+		/* Submit button styling */
+		.submit-btn-cta {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: #e50815;
+			color: #ffffff;
+			border: none;
+			border-radius: 0.25rem;
+			font-size: 1.1rem;
+			font-weight: 600;
+			padding: 1rem 1.25rem;
+			gap: 0.5rem;
+			transition: background-color 0.3s ease-in-out;
+		}
+		.submit-btn-cta:hover {background-color: #b80610;}
+		
+		/* Error message styling */
+		.form-error-msg {
+			display: none;
+			align-items: center;
+			justify-content: center;
+			gap: 0.25rem;
+		}
+		.form-error-text {
+			font-size: 0.85rem;
+			color: #eb3942;
+		}
+		
+		.input-container[data-state="invalid"] .form-error-msg {display: flex;}
+		.input-container[data-state="invalid"] .email-input {
+			border: 1.5px solid #eb3942;
+			outline: 2px solid #ffffff;
+			outline-offset: 2px;
+		}
+	</style>
+</head>
+<body>
+	<form class="cta-form">
+		<span>Ready to watch? Enter your email to create or restart your membership.</span>
+		<div class="email-input-row">
+			<div class="input-container" data-state="hidden">
+			
+				<div class="floating-email-group">
+					<input 
+						type="email" 
+						autocomplete="email"
+						placeholder= " "
+						class="email-input"
+						id="email"
+					>
+					<label for="email">Email address</label>
+				</div>
+				
+				<div class="form-error-msg">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" class="form-error-icon">
+					  <path fill="none" stroke="#eb3942" stroke-width="2" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2z"/>
+					  <path fill="#eb3942" d="M17 15.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/>
+					</svg>
+					<span class="form-error-text">Please enter a valid address.</span>
+				</div>
+			</div>
+			<button class="submit-btn-cta" type="submit">
+				<span class="btn-text">Get Started</span>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+					<path d="m9 18 6-6-6-6"/>
+				 </svg>
+			</button>
+		</div>
+	</form>
+	<script>
+		const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		
+		document.querySelectorAll('.cta-form').forEach(form => {
+			const emailContainer = form.querySelector('.input-container');
+			const emailInput = form.querySelector('.email-input');
+			const errorText = form.querySelector('.form-error-text');
+			let hasValidated = false;
+			
+			function validateEmail() {
+				const email = emailInput.value.trim();
+
+				if (email === '') {
+					errorText.textContent = 'Email is required.';
+					emailContainer.dataset.state = 'invalid';
+					return false;
+				} else if (!emailRegex.test(email)) {
+					errorText.textContent = 'Please enter a valid address.';
+					emailContainer.dataset.state = 'invalid';
+					return false;
+				} else {
+					emailContainer.dataset.state = 'valid';
+					return true;
+				}
+			}
+			
+			
+			form.addEventListener('submit', (event) => {
+				event.preventDefault();
+				hasValidated = true;
+				if (validateEmail()) {
+					console.log('Form submitted with email:', emailInput.value);
+				}
+			});
+			
+			emailInput.addEventListener('input', () => {
+				// Keep validating on every stroke if the user already tried to submit
+				if (hasValidated) {
+					validateEmail();
+				}
+			});
+		});
+	</script>
+</body>
+</html>
